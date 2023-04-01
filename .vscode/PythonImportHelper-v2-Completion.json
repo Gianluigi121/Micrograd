@@ -1,0 +1,268 @@
+[
+    {
+        "label": "graphviz",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "graphviz",
+        "description": "graphviz",
+        "detail": "graphviz",
+        "documentation": {}
+    },
+    {
+        "label": "Digraph",
+        "importPath": "graphviz",
+        "description": "graphviz",
+        "isExtraImport": true,
+        "detail": "graphviz",
+        "documentation": {}
+    },
+    {
+        "label": "math",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "math",
+        "description": "math",
+        "detail": "math",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "draw_dot",
+        "importPath": "main.draw",
+        "description": "main.draw",
+        "isExtraImport": true,
+        "detail": "main.draw",
+        "documentation": {}
+    },
+    {
+        "label": "Value",
+        "importPath": "engine",
+        "description": "engine",
+        "isExtraImport": true,
+        "detail": "engine",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "torch",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "torch",
+        "description": "torch",
+        "detail": "torch",
+        "documentation": {}
+    },
+    {
+        "label": "Value",
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "isExtraImport": true,
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "trace",
+        "kind": 2,
+        "importPath": "main.draw",
+        "description": "main.draw",
+        "peekOfCode": "def trace(root):\n  # builds a set of all nodes and edges in a graph\n  nodes, edges = set(), set()\n  def build(v):\n    if v not in nodes:\n      nodes.add(v)\n      for child in v._prev:\n        edges.add((child, v))\n        build(child)\n  build(root)",
+        "detail": "main.draw",
+        "documentation": {}
+    },
+    {
+        "label": "draw_dot",
+        "kind": 2,
+        "importPath": "main.draw",
+        "description": "main.draw",
+        "peekOfCode": "def draw_dot(root):\n  dot = Digraph(format='svg', graph_attr={'rankdir': 'LR'}) # LR = left to right\n  nodes, edges = trace(root)\n  for n in nodes:\n    uid = str(id(n))\n    # for any value in the graph, create a rectangular ('record') node for it\n    dot.node(name = uid, label = \"{ %s | data %.4f | grad %.4f }\" % (n.label, n.data, n.grad), shape='record')\n    if n._op:\n      # if this value is a result of some operation, create an op node for it\n      dot.node(name = uid + n._op, label = n._op)",
+        "detail": "main.draw",
+        "documentation": {}
+    },
+    {
+        "label": "Value",
+        "kind": 6,
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "peekOfCode": "class Value:\n    def __init__(self, data, _children=(), _op='', label=''):\n        self.data = data\n        self.grad = 0.0\n        # We need to keep track of the children(which values generate the current value for the backpropagation)\n        self._prev = set(_children)\n        self._op = _op\n        self._backward = lambda: None     \n        self.label = label\n    def __repr__(self):",
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "x1",
+        "kind": 5,
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "peekOfCode": "x1 = Value(2.0, label='x1')\nx2 = Value(0.0, label='x2')\n# weights w1,w2\nw1 = Value(-3.0, label='w1')\nw2 = Value(1.0, label='w2')\n# bias of the neuron\nb = Value(6.8813735870195432, label='b')\n# x1*w1 + x2*w2 + b\nx1w1 = x1*w1; x1w1.label = 'x1*w1'\nx2w2 = x2*w2; x2w2.label = 'x2*w2'",
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "x2",
+        "kind": 5,
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "peekOfCode": "x2 = Value(0.0, label='x2')\n# weights w1,w2\nw1 = Value(-3.0, label='w1')\nw2 = Value(1.0, label='w2')\n# bias of the neuron\nb = Value(6.8813735870195432, label='b')\n# x1*w1 + x2*w2 + b\nx1w1 = x1*w1; x1w1.label = 'x1*w1'\nx2w2 = x2*w2; x2w2.label = 'x2*w2'\nx1w1x2w2 = x1w1 + x2w2; x1w1x2w2.label = 'x1*w1 + x2*w2'",
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "w1",
+        "kind": 5,
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "peekOfCode": "w1 = Value(-3.0, label='w1')\nw2 = Value(1.0, label='w2')\n# bias of the neuron\nb = Value(6.8813735870195432, label='b')\n# x1*w1 + x2*w2 + b\nx1w1 = x1*w1; x1w1.label = 'x1*w1'\nx2w2 = x2*w2; x2w2.label = 'x2*w2'\nx1w1x2w2 = x1w1 + x2w2; x1w1x2w2.label = 'x1*w1 + x2*w2'\nn = x1w1x2w2 + b; n.label = 'n'\no = n.tanh(); o.label = 'o'",
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "w2",
+        "kind": 5,
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "peekOfCode": "w2 = Value(1.0, label='w2')\n# bias of the neuron\nb = Value(6.8813735870195432, label='b')\n# x1*w1 + x2*w2 + b\nx1w1 = x1*w1; x1w1.label = 'x1*w1'\nx2w2 = x2*w2; x2w2.label = 'x2*w2'\nx1w1x2w2 = x1w1 + x2w2; x1w1x2w2.label = 'x1*w1 + x2*w2'\nn = x1w1x2w2 + b; n.label = 'n'\no = n.tanh(); o.label = 'o'\no.backward()",
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "b",
+        "kind": 5,
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "peekOfCode": "b = Value(6.8813735870195432, label='b')\n# x1*w1 + x2*w2 + b\nx1w1 = x1*w1; x1w1.label = 'x1*w1'\nx2w2 = x2*w2; x2w2.label = 'x2*w2'\nx1w1x2w2 = x1w1 + x2w2; x1w1x2w2.label = 'x1*w1 + x2*w2'\nn = x1w1x2w2 + b; n.label = 'n'\no = n.tanh(); o.label = 'o'\no.backward()\ndraw_dot(o)",
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "x1w1",
+        "kind": 5,
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "peekOfCode": "x1w1 = x1*w1; x1w1.label = 'x1*w1'\nx2w2 = x2*w2; x2w2.label = 'x2*w2'\nx1w1x2w2 = x1w1 + x2w2; x1w1x2w2.label = 'x1*w1 + x2*w2'\nn = x1w1x2w2 + b; n.label = 'n'\no = n.tanh(); o.label = 'o'\no.backward()\ndraw_dot(o)",
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "x2w2",
+        "kind": 5,
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "peekOfCode": "x2w2 = x2*w2; x2w2.label = 'x2*w2'\nx1w1x2w2 = x1w1 + x2w2; x1w1x2w2.label = 'x1*w1 + x2*w2'\nn = x1w1x2w2 + b; n.label = 'n'\no = n.tanh(); o.label = 'o'\no.backward()\ndraw_dot(o)",
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "x1w1x2w2",
+        "kind": 5,
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "peekOfCode": "x1w1x2w2 = x1w1 + x2w2; x1w1x2w2.label = 'x1*w1 + x2*w2'\nn = x1w1x2w2 + b; n.label = 'n'\no = n.tanh(); o.label = 'o'\no.backward()\ndraw_dot(o)",
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "n",
+        "kind": 5,
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "peekOfCode": "n = x1w1x2w2 + b; n.label = 'n'\no = n.tanh(); o.label = 'o'\no.backward()\ndraw_dot(o)",
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "o",
+        "kind": 5,
+        "importPath": "main.engine",
+        "description": "main.engine",
+        "peekOfCode": "o = n.tanh(); o.label = 'o'\no.backward()\ndraw_dot(o)",
+        "detail": "main.engine",
+        "documentation": {}
+    },
+    {
+        "label": "Neuron",
+        "kind": 6,
+        "importPath": "main.nn",
+        "description": "main.nn",
+        "peekOfCode": "class Neuron:\n    def __init__(self, nin):\n        # nin: # of number that will come into one neuron\n        self.w = [Value(random.uniform(-1, 1)) for _ in range(nin)]\n        self.b = Value(random.uniform(-1, 1))\n    def __call__(self, x):\n        out = sum(wi*xi for wi, xi in zip(self.w, x))+self.b\n        out = out.tanh()\n        return out\n    def parameters(self):",
+        "detail": "main.nn",
+        "documentation": {}
+    },
+    {
+        "label": "Layer",
+        "kind": 6,
+        "importPath": "main.nn",
+        "description": "main.nn",
+        "peekOfCode": "class Layer:\n    # nin: # of numbers/neurons that will come into each neuron in this layer\n    # nout: # of neurons in this layer\n    def __init__(self, nin, nout):\n        self.neurons = [Neuron(nin) for _ in range(nout)]\n    def __call__(self, x):\n        outs = [n(x) for n in self.neurons]\n        return outs[0] if len(outs) == 1 else outs\n    def parameters(self):\n        return [p for n in self.neurons for p in n.parameters()]",
+        "detail": "main.nn",
+        "documentation": {}
+    },
+    {
+        "label": "MLP",
+        "kind": 6,
+        "importPath": "main.nn",
+        "description": "main.nn",
+        "peekOfCode": "class MLP:\n    # nin: # of numbers that will come into each neuron in the first layer\n    # nout: A list of # of neurons in each layer\n    def __init__(self, nin, nouts):\n        sin = [nin] + nouts\n        self.layers =  [Layer(sin[i], sin[i+1]) for i in range(len(nouts))]\n    def  __call__(self, x):\n        for l in self.layers:\n            x = l(x)\n        return x",
+        "detail": "main.nn",
+        "documentation": {}
+    },
+    {
+        "label": "xs",
+        "kind": 5,
+        "importPath": "main.nn",
+        "description": "main.nn",
+        "peekOfCode": "xs = [\n  [2.0, 3.0, -1.0],\n  [3.0, -1.0, 0.5],\n  [0.5, 1.0, 1.0],\n  [1.0, 1.0, -1.0],\n]\nys = [1.0, -1.0, -1.0, 1.0] # desired targets\nn = MLP(3, [4, 4, 1])\nfor k in range(20):\n  # forward pass",
+        "detail": "main.nn",
+        "documentation": {}
+    },
+    {
+        "label": "ys",
+        "kind": 5,
+        "importPath": "main.nn",
+        "description": "main.nn",
+        "peekOfCode": "ys = [1.0, -1.0, -1.0, 1.0] # desired targets\nn = MLP(3, [4, 4, 1])\nfor k in range(20):\n  # forward pass\n  ypred = [n(x) for x in xs]\n  loss = sum((yout - ygt)**2 for ygt, yout in zip(ys, ypred))\n  # backward pass\n  for p in n.parameters():\n    p.grad = 0.0\n  loss.backward()",
+        "detail": "main.nn",
+        "documentation": {}
+    },
+    {
+        "label": "n",
+        "kind": 5,
+        "importPath": "main.nn",
+        "description": "main.nn",
+        "peekOfCode": "n = MLP(3, [4, 4, 1])\nfor k in range(20):\n  # forward pass\n  ypred = [n(x) for x in xs]\n  loss = sum((yout - ygt)**2 for ygt, yout in zip(ys, ypred))\n  # backward pass\n  for p in n.parameters():\n    p.grad = 0.0\n  loss.backward()\n  # update",
+        "detail": "main.nn",
+        "documentation": {}
+    },
+    {
+        "label": "test_sanity_check",
+        "kind": 2,
+        "importPath": "test.test_engine",
+        "description": "test.test_engine",
+        "peekOfCode": "def test_sanity_check():\n    x = Value(-4.0)\n    z = 2 * x + 2 + x\n    q = z.relu() + z * x\n    h = (z * z).relu()\n    y = h + q + q * x\n    y.backward()\n    xmg, ymg = x, y\n    x = torch.Tensor([-4.0]).double()\n    x.requires_grad = True",
+        "detail": "test.test_engine",
+        "documentation": {}
+    },
+    {
+        "label": "test_more_ops",
+        "kind": 2,
+        "importPath": "test.test_engine",
+        "description": "test.test_engine",
+        "peekOfCode": "def test_more_ops():\n    a = Value(-4.0)\n    b = Value(2.0)\n    c = a + b\n    d = a * b + b**3\n    c += c + 1\n    c += 1 + c + (-a)\n    d += d * 2 + (b + a).relu()\n    d += 3 * d + (b - a).relu()\n    e = c - d",
+        "detail": "test.test_engine",
+        "documentation": {}
+    }
+]
