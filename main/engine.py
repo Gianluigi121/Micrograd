@@ -1,6 +1,6 @@
 import math
 import random
-from draw import draw_dot
+from main.draw import draw_dot
 
 # We want to write a library class Value act as the Tensor class in PyTorch
 # And we will implement the back propagation
@@ -65,6 +65,9 @@ class Value:
     
     def __rmul__(self, other):
         return self * other
+    
+    def __rtruediv__(self, other):
+        return other * (self ** -1)
     
     def exp(self):
         out = Value(math.exp(self.data), _children=(self,), _op='exp')
