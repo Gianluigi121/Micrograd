@@ -3,6 +3,7 @@ import random
 
 class Neuron:
     def __init__(self, nin):
+        # nin: # of number that will come into one neuron
         self.w = [Value(random.uniform(-1, 1)) for _ in range(nin)]
         self.b = Value(random.uniform(-1, 1))
         
@@ -15,6 +16,8 @@ class Neuron:
         return self.w + [self.b]
     
 class Layer:
+    # nin: # of numbers/neurons that will come into each neuron in this layer
+    # nout: # of neurons in this layer
     def __init__(self, nin, nout):
         self.neurons = [Neuron(nin) for _ in range(nout)]
     
@@ -26,6 +29,8 @@ class Layer:
         return [p for n in self.neurons for p in n.parameters()]
     
 class MLP:
+    # nin: # of numbers that will come into each neuron in the first layer
+    # nout: A list of # of neurons in each layer
     def __init__(self, nin, nouts):
         sin = [nin] + nouts
         self.layers =  [Layer(sin[i], sin[i+1]) for i in range(len(nouts))]
