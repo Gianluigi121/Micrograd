@@ -3,3 +3,4 @@ main/__pycache__/
 test/graph_output
 .vscode/
 .DS_Store
+graph_output.png
