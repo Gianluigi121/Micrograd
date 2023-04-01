@@ -7,3 +7,4 @@ File Structure:
 1. engine.py: This file contains a Value calss which could be seen as a simplification of Tensor class in pytorch
 2. nn.py: This file code a MLP from scratch
 3. test_engine.py: Test cases
+4. Micrograd.md: A detailed explanation of every step of the implementation
